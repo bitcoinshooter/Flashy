@@ -1,0 +1,72 @@
+# XcodeGen manifest. The .xcodeproj is GENERATED from this file and is not committed —
+# a checked-in project file is the usual reason "it works on my machine" fails.
+#   brew install xcodegen && xcodegen generate
+name: FLASH
+options:
+  bundleIdPrefix: com.flash
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configFiles:
+  Debug: Config.xcconfig
+  Release: Config.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"          # iPhone only
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_EMIT_LOC_STRINGS: NO
+    GENERATE_INFOPLIST_FILE: NO
+
+targets:
+  FLASH:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug: Config.xcconfig
+      Release: Config.xcconfig
+    sources:
+      - path: App
+        excludes: ["Web", "Info.plist", "FLASH.entitlements"]
+      - path: Shared
+      # a folder reference, so the bundle keeps Web/index.html as a path
+      - path: App/Web
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FLASH_BUNDLE_ID)
+        PRODUCT_NAME: FLASH
+        INFOPLIST_FILE: App/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # Accent sync between app and widgets needs an App Group, which a FREE Apple ID
+        # cannot sign. Left off so a clean clone builds for everyone — see README step 5.
+        # CODE_SIGN_ENTITLEMENTS: App/FLASH.entitlements
+    dependencies:
+      - target: FlashWidgets
+        embed: true
+
+  FlashWidgets:
+    type: app-extension
+    platform: iOS
+    configFiles:
+      Debug: Config.xcconfig
+      Release: Config.xcconfig
+    sources:
+      - path: Widgets
+        excludes: ["Info.plist", "FlashWidgets.entitlements"]
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(FLASH_BUNDLE_ID).widgets
+        PRODUCT_NAME: FlashWidgets
+        INFOPLIST_FILE: Widgets/Info.plist
+        # CODE_SIGN_ENTITLEMENTS: Widgets/FlashWidgets.entitlements
+    dependencies:
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework

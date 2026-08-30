@@ -1,0 +1,9 @@
+// The only file you have to edit.
+//
+// FLASH_BUNDLE_ID must be globally unique — put your own reverse-domain here, or just
+// append your name. The widget extension automatically becomes <this>.widgets
+FLASH_BUNDLE_ID = com.flash.prototype
+
+// Your Apple Developer Team ID. Leave EMPTY to let Xcode pick your personal team
+// (Signing & Capabilities will show it after you select a device).
+DEVELOPMENT_TEAM =
