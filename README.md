@@ -32,6 +32,20 @@ Then in Xcode:
 5. First launch only — on the iPhone: **Settings → General → VPN & Device Management** →
    tap the developer profile → **Trust**.
 
+### Getting later updates
+
+Don't re-run `git clone` — it will fail if the `Flashy` folder already exists, and you
+may not notice, leaving you building an old copy. Pull into the clone you already have:
+
+```bash
+cd Flashy
+git pull
+./setup.sh
+```
+
+If the app looks unchanged after that, Xcode has cached the old web bundle:
+**Product → Clean Build Folder**, then run again.
+
 ### Add the widgets
 
 Long-press the home screen → **Edit** (top left) → **Add Widget** → search **FLASH** → add.
